@@ -19,18 +19,22 @@ service<http:Service> hello bind listener {
 
     # + caller - Server Connector
     # + request - Request
-
     sayHello (endpoint caller, http:Request request) {
 
         // Create object to carry data back to caller
         http:Response response = new;
 
-        // Objects and structs can have function calls
-        response.setTextPayload("Hello Ballerina!\n");
+
+        json responseJson = {
+            "message": "Hello Ballerina!"
+        };
+        http:Response res = new;
+
+        res.setJsonPayload(untaint responseJson);
 
         // Send a response back to caller
         // Errors are ignored with '_'
         // -> indicates a synchronous network-bound call
-        _ = caller -> respond(response);
+        _ = caller -> respond(res);
     }
 }
